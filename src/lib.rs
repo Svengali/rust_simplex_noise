@@ -1,4 +1,3 @@
-#![feature(test)]
 
 //!
 //! A speed-improved perlin and simplex noise algorithm for 2D and 3D.
@@ -27,7 +26,8 @@
 
 #[macro_use]
 extern crate lazy_static;
-extern crate test;
+
+//extern crate test;
 
 
 #[derive(Debug, Default, Clone, Copy)]
@@ -316,54 +316,4 @@ impl Simplex {
         lerp(lerp(n00, n10, u), lerp(n01, n11, u), fade(y))
     }
 
-}
-
-#[test]
-fn test_simplex() {
-    let simplex = Simplex::new(10.);
-
-    assert_eq!(simplex.simplex2(10., 10.), -0.44912308);
-    assert_eq!(simplex.simplex3(100., 100., 50.), -0.8679863);
-}
-
-#[bench]
-fn bench_simplex2(b: &mut test::Bencher) {
-    let simplex = Simplex::new(10.);
-    b.iter(|| simplex.simplex2(10.2, 10.2))
-}
-#[bench]
-fn bench_simplex2_1000_1000(b: &mut test::Bencher) {
-    let simplex = Simplex::new(10.);
-    b.iter(|| {
-        let mut vecco = vec![];
-        vecco.reserve(1001*1001);
-        for x in 0..1000 {
-            for y in 0..1000 {
-                vecco.push(simplex.simplex2(x as f32, y as f32));
-            }
-        }
-        vecco
-        
-    })
-}
-#[bench]
-fn bench_simplex3_1000_1000(b: &mut test::Bencher) {
-    let simplex = Simplex::new(10.);
-    b.iter(|| {
-        let mut el=0.;
-        for x in 0..64 {
-            for y in 0..64 {
-                for z in 0..64 {
-                    el = simplex.simplex3(x as f32, y as f32, z as f32);
-                }
-            }
-        }
-        el
-        
-    })
-}
-#[bench]
-fn bench_simplex3(b: &mut test::Bencher) {
-    let simplex = Simplex::new(10.);
-    b.iter(|| simplex.simplex3(100., 100., 50.))
 }
